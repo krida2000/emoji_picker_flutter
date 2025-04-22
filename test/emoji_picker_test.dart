@@ -10,27 +10,29 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('EmojiPicker Tests', () {
-    testWidgets('Should allow user to select an emoji',
-        (WidgetTester tester) async {
-      final _controller = TextEditingController();
-      Emoji? _emojiSelected;
-      Category? _categorySelected;
+    testWidgets('Should allow user to select an emoji', (
+      WidgetTester tester,
+    ) async {
+      final controller = TextEditingController();
+      Emoji? emojiSelected;
+      Category? categorySelected;
 
       // Build our app and trigger a frame.
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: EmojiPicker(
-              textEditingController: _controller,
+              textEditingController: controller,
               onEmojiSelected: (category, emoji) {
-                _emojiSelected = emoji;
-                _categorySelected = category;
+                emojiSelected = emoji;
+                categorySelected = category;
               },
               config: const Config(
-                  height: 256,
-                  categoryViewConfig: CategoryViewConfig(
-                    recentTabBehavior: RecentTabBehavior.NONE,
-                  )),
+                height: 256,
+                categoryViewConfig: CategoryViewConfig(
+                  recentTabBehavior: RecentTabBehavior.NONE,
+                ),
+              ),
             ),
           ),
         ),
@@ -52,27 +54,26 @@ void main() {
       await tester.pumpAndSettle();
 
       // Check if the emoji is added to the text controller
-      expect(_controller.text, contains('🙂'));
+      expect(controller.text, contains('🙂'));
 
       // Check if the emoji been passed to the 'onEmojiSelected' callback
       expect(
-        _emojiSelected,
-        equals(
-          const Emoji('🙂', 'face | happy | slightly | smile | smiling'),
-        ),
+        emojiSelected,
+        equals(const Emoji('🙂', 'face | happy | slightly | smile | smiling')),
       );
 
       // Check if the category been passed to the 'onEmojiSelected' callback
-      expect(_categorySelected, equals(Category.SMILEYS));
+      expect(categorySelected, equals(Category.SMILEYS));
     });
 
-    testWidgets('Should allow to select an emoji with skintone on longPress',
-        (WidgetTester tester) async {
-      final _controller = TextEditingController();
-      final _utils = EmojiPickerUtils();
+    testWidgets('Should allow to select an emoji with skintone on longPress', (
+      WidgetTester tester,
+    ) async {
+      final controller0 = TextEditingController();
+      final utils = EmojiPickerUtils();
       final emoji = const Emoji('👍', 'Thumbs Up', hasSkinTone: true);
-      Emoji? _emojiSelected;
-      Category? _categorySelected;
+      Emoji? emojiSelected0;
+      Category? categorySelected0;
 
       // Build our app and trigger a frame.
       await tester.pumpWidget(
@@ -81,10 +82,10 @@ void main() {
             body: Padding(
               padding: const EdgeInsets.only(top: 64.0),
               child: EmojiPicker(
-                textEditingController: _controller,
+                textEditingController: controller0,
                 onEmojiSelected: (category, emoji) {
-                  _emojiSelected = emoji;
-                  _categorySelected = category;
+                  emojiSelected0 = emoji;
+                  categorySelected0 = category;
                 },
                 config: const Config(
                   height: 500,
@@ -123,8 +124,9 @@ void main() {
       /// Check if all skin tones are rendered in overlay
       Finder? skinToneVariantToFind;
       for (var i = 0; i < SkinTone.values.length; i++) {
-        skinToneVariantToFind =
-            find.text(_utils.applySkinTone(emoji, SkinTone.values[i]).emoji);
+        skinToneVariantToFind = find.text(
+          utils.applySkinTone(emoji, SkinTone.values[i]).emoji,
+        );
         // Verify if we can find the skintone variant
         expect(skinToneVariantToFind, findsOneWidget);
       }
@@ -133,18 +135,18 @@ void main() {
       await tester.tap(skinToneVariantToFind!);
 
       // Check if the emoji is added to the text controller
-      expect(_controller.text, contains('👍🏿'));
+      expect(controller0.text, contains('👍🏿'));
 
       // Check if the emoji been passed to the 'onEmojiSelected' callback
-      expect(_emojiSelected?.emoji, equals('👍🏿'));
+      expect(emojiSelected0?.emoji, equals('👍🏿'));
       expect(
-        _emojiSelected?.name,
+        emojiSelected0?.name,
         equals('+1 | good | hand | like | thumb | up | yes'),
       );
-      expect(_emojiSelected?.hasSkinTone, equals(true));
+      expect(emojiSelected0?.hasSkinTone, equals(true));
 
       // Check if the category been passed to the 'onEmojiSelected' callback
-      expect(_categorySelected, equals(Category.SMILEYS));
+      expect(categorySelected0, equals(Category.SMILEYS));
     });
   });
 }

@@ -8,7 +8,8 @@ class DefaultCategoryView extends CategoryView {
     super.config,
     super.state,
     super.tabController,
-    super.pageController, {
+    super.pageController,
+    super.onTap, {
     super.key,
   });
 
@@ -28,9 +29,9 @@ class DefaultCategoryViewState extends CategoryViewState {
             child: DefaultCategoryTabBar(
               widget.config,
               widget.tabController,
-              widget.pageController,
               widget.state.categoryEmoji,
               closeSkinToneOverlay,
+              widget.onTap,
             ),
           ),
           _buildExtraTab(widget.config.categoryViewConfig.extraTab),

@@ -33,19 +33,11 @@ class EmojiContainer extends StatelessWidget {
     if (buttonMode == ButtonMode.MATERIAL) {
       return Material(
         color: color,
-        child: padding == null
-            ? child
-            : Padding(
-                padding: padding!,
-                child: child,
-              ),
+        child:
+            padding == null ? child : Padding(padding: padding!, child: child),
       );
     } else {
-      return Container(
-        color: color,
-        padding: padding,
-        child: child,
-      );
+      return Container(color: color, padding: padding, child: child);
     }
   }
 }

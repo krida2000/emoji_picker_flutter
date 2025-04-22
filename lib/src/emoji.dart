@@ -40,11 +40,7 @@ class Emoji {
 
   ///  Encode Emoji to json
   Map<String, dynamic> toJson() {
-    return {
-      'emoji': emoji,
-      'name': name,
-      'hasSkinTone': hasSkinTone,
-    };
+    return {'emoji': emoji, 'name': name, 'hasSkinTone': hasSkinTone};
   }
 
   /// Copy method

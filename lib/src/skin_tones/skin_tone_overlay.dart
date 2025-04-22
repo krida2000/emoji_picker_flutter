@@ -19,10 +19,7 @@ mixin SkinToneOverlayStateMixin<T extends StatefulWidget> on State<T> {
   }) {
     if (hasSkinTone) {
       final link = links.putIfAbsent(linkKey, LayerLink.new);
-      return CompositedTransformTarget(
-        link: link,
-        child: child,
-      );
+      return CompositedTransformTarget(link: link, child: child);
     }
     return child;
   }
@@ -44,9 +41,10 @@ mixin SkinToneOverlayStateMixin<T extends StatefulWidget> on State<T> {
     LayerLink link,
   ) {
     // Generate other skintone options
-    final skinTonesEmoji = SkinTone.values
-        .map((skinTone) => _utils.applySkinTone(emoji, skinTone))
-        .toList();
+    final skinTonesEmoji =
+        SkinTone.values
+            .map((skinTone) => _utils.applySkinTone(emoji, skinTone))
+            .toList();
 
     final screenWidth = MediaQuery.of(context).size.width;
     final emojiPickerRenderbox = context.findRenderObject() as RenderBox;
@@ -61,48 +59,49 @@ mixin SkinToneOverlayStateMixin<T extends StatefulWidget> on State<T> {
     final top = _calculateTopOffset(emojiBoxSize);
 
     _overlay = OverlayEntry(
-      builder: (context) => Positioned(
-        top: 0,
-        left: 0,
-        child: CompositedTransformFollower(
-          offset: Offset(left, top),
-          link: link,
-          showWhenUnlinked: false,
-          child: TapRegion(
-            onTapOutside: (_) => closeSkinToneOverlay(),
-            child: Material(
-              elevation: 4.0,
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                color: config.skinToneConfig.dialogBackgroundColor,
-                child: Row(
-                  children: [
-                    EmojiCell.fromConfig(
-                      emoji: emoji,
-                      emojiSize: emojiSize,
-                      emojiBoxSize: emojiBoxSize,
-                      categoryEmoji: categoryEmoji,
-                      onEmojiSelected: onEmojiSelected,
-                      config: config,
+      builder:
+          (context) => Positioned(
+            top: 0,
+            left: 0,
+            child: CompositedTransformFollower(
+              offset: Offset(left, top),
+              link: link,
+              showWhenUnlinked: false,
+              child: TapRegion(
+                onTapOutside: (_) => closeSkinToneOverlay(),
+                child: Material(
+                  elevation: 4.0,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    color: config.skinToneConfig.dialogBackgroundColor,
+                    child: Row(
+                      children: [
+                        EmojiCell.fromConfig(
+                          emoji: emoji,
+                          emojiSize: emojiSize,
+                          emojiBoxSize: emojiBoxSize,
+                          categoryEmoji: categoryEmoji,
+                          onEmojiSelected: onEmojiSelected,
+                          config: config,
+                        ),
+                        ...List.generate(
+                          SkinTone.values.length,
+                          (index) => EmojiCell.fromConfig(
+                            emoji: skinTonesEmoji[index],
+                            emojiSize: emojiSize,
+                            emojiBoxSize: emojiBoxSize,
+                            categoryEmoji: categoryEmoji,
+                            onEmojiSelected: onEmojiSelected,
+                            config: config,
+                          ),
+                        ),
+                      ],
                     ),
-                    ...List.generate(
-                      SkinTone.values.length,
-                      (index) => EmojiCell.fromConfig(
-                        emoji: skinTonesEmoji[index],
-                        emojiSize: emojiSize,
-                        emojiBoxSize: emojiBoxSize,
-                        categoryEmoji: categoryEmoji,
-                        onEmojiSelected: onEmojiSelected,
-                        config: config,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ),
     );
 
     if (_overlay != null) {
