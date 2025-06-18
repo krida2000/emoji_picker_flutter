@@ -42,14 +42,13 @@ class DefaultCategoryTabBar extends StatelessWidget {
           closeSkinToneOverlay();
           onTap(index);
         },
-        tabs:
-            categoryEmojis
-                .asMap()
-                .entries
-                .map<Widget>(
-                  (item) => _buildCategoryTab(item.key, item.value.category),
-                )
-                .toList(),
+        tabs: categoryEmojis
+            .asMap()
+            .entries
+            .map<Widget>(
+              (item) => _buildCategoryTab(item.key, item.value.category),
+            )
+            .toList(),
       ),
     );
   }

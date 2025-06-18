@@ -118,33 +118,34 @@ class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
   Widget _buildCategoryView(double emojiSize, int columnsCount) {
     return widget.config.categoryViewConfig.customCategoryView != null
         ? widget.config.categoryViewConfig.customCategoryView!(
-          widget.config,
-          widget.state,
-          _tabController,
-          _pageController,
-        )
+            widget.config,
+            widget.state,
+            _tabController,
+            _pageController,
+          )
         : DefaultCategoryView(
-          widget.config,
-          widget.state,
-          _tabController,
-          _pageController,
-          (index) {
-            double offset = widget.config.emojiViewConfig.gridPadding.top;
+            widget.config,
+            widget.state,
+            _tabController,
+            _pageController,
+            (index) {
+              double offset = widget.config.emojiViewConfig.gridPadding.top;
 
-            for (int i = 0; i < index; i++) {
-              offset +=
-                  (widget.state.categoryEmoji[i].emoji.length / columnsCount)
-                      .ceil() *
-                  (_emojiSize + widget.config.emojiViewConfig.verticalSpacing);
-            }
+              for (int i = 0; i < index; i++) {
+                offset +=
+                    (widget.state.categoryEmoji[i].emoji.length / columnsCount)
+                        .ceil() *
+                    (_emojiSize +
+                        widget.config.emojiViewConfig.verticalSpacing);
+              }
 
-            _scrollController.animateTo(
-              offset,
-              duration: Duration(milliseconds: 200),
-              curve: Curves.linear,
-            );
-          },
-        );
+              _scrollController.animateTo(
+                offset,
+                duration: Duration(milliseconds: 200),
+                curve: Curves.linear,
+              );
+            },
+          );
   }
 
   Widget _buildEmojiView(
@@ -180,7 +181,7 @@ class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
     int columnsCount,
     CategoryEmoji categoryEmoji,
   ) {
-    if(categoryEmoji.category.index == 0){
+    if (categoryEmoji.category.index == 0) {
       categoryEmoji = _recentEmoji;
     }
 
@@ -191,10 +192,9 @@ class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
     // Build page normally
     return SliverPadding(
       padding: EdgeInsets.only(
-        top:
-            categoryEmoji.category.index == 0
-                ? widget.config.emojiViewConfig.gridPadding.top
-                : 0,
+        top: categoryEmoji.category.index == 0
+            ? widget.config.emojiViewConfig.gridPadding.top
+            : 0,
         bottom: widget.config.emojiViewConfig.verticalSpacing - 10,
       ),
       sliver: SliverGrid.builder(

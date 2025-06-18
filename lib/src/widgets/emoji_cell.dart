@@ -146,12 +146,12 @@ class EmojiCell extends StatelessWidget {
             enableSkinTones &&
             onSkinToneDialogRequested != null
         ? Container(
-          decoration: TriangleDecoration(
-            color: skinToneIndicatorColor,
-            size: 8.0,
-          ),
-          child: emojiText,
-        )
+            decoration: TriangleDecoration(
+              color: skinToneIndicatorColor,
+              size: 8.0,
+            ),
+            child: emojiText,
+          )
         : emojiText;
   }
 

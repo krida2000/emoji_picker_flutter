@@ -76,26 +76,22 @@ class SearchViewState<T extends SearchView> extends State<T>
         emojiBoxSize: emojiBoxSize,
         onEmojiSelected: widget.state.onEmojiSelected,
         config: widget.config,
-        onSkinToneDialogRequested: (
-          emojiBoxPosition,
-          emoji,
-          emojiSize,
-          category,
-        ) {
-          closeSkinToneOverlay();
-          if (!emoji.hasSkinTone || !widget.config.skinToneConfig.enabled) {
-            return;
-          }
-          showSkinToneOverlay(
-            emojiBoxPosition,
-            emoji,
-            emojiSize,
-            null, // Todo: check if we can provide the category
-            widget.config,
-            _onSkinTonedEmojiSelected,
-            links[emoji.emoji]!,
-          );
-        },
+        onSkinToneDialogRequested:
+            (emojiBoxPosition, emoji, emojiSize, category) {
+              closeSkinToneOverlay();
+              if (!emoji.hasSkinTone || !widget.config.skinToneConfig.enabled) {
+                return;
+              }
+              showSkinToneOverlay(
+                emojiBoxPosition,
+                emoji,
+                emojiSize,
+                null, // Todo: check if we can provide the category
+                widget.config,
+                _onSkinTonedEmojiSelected,
+                links[emoji.emoji]!,
+              );
+            },
       ),
     );
   }

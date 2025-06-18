@@ -235,8 +235,11 @@ class EmojiPickerState extends State<EmojiPicker> {
 
       if (cursorPosition >= 0) {
         final selection = controller.value.selection;
-        final newTextBeforeCursor =
-            selection.textBefore(text).characters.skipLast(1).toString();
+        final newTextBeforeCursor = selection
+            .textBefore(text)
+            .characters
+            .skipLast(1)
+            .toString();
 
         controller.value = controller.value.copyWith(
           text: newTextBeforeCursor + selection.textAfter(text),
@@ -412,18 +415,20 @@ class EmojiPickerState extends State<EmojiPicker> {
     return widget.config.searchViewConfig.customSearchView == null
         ? DefaultSearchView(widget.config, _state, _hideSearchView)
         : widget.config.searchViewConfig.customSearchView!(
-          widget.config,
-          _state,
-          _hideSearchView,
-        );
+            widget.config,
+            _state,
+            _hideSearchView,
+          );
   }
 
   Widget _wrapScrollBehaviorForPlatforms(Widget child) {
     return !kIsWeb && Platform.isLinux
         ? ScrollConfiguration(
-          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-          child: child,
-        )
+            behavior: ScrollConfiguration.of(
+              context,
+            ).copyWith(scrollbars: false),
+            child: child,
+          )
         : child;
   }
 
@@ -431,10 +436,9 @@ class EmojiPickerState extends State<EmojiPicker> {
     return _wrapScrollBehaviorForPlatforms(
       SizedBox(
         height: widget.config.height,
-        child:
-            widget.customWidget == null
-                ? DefaultEmojiPickerView(widget.config, _state, _showSearchView)
-                : widget.customWidget!(widget.config, _state, _showSearchView),
+        child: widget.customWidget == null
+            ? DefaultEmojiPickerView(widget.config, _state, _showSearchView)
+            : widget.customWidget!(widget.config, _state, _showSearchView),
       ),
     );
   }

@@ -17,10 +17,10 @@ class EmojiPickerInternalUtils {
 
   // Get available emoji for given category title
   Future<CategoryEmoji> _getAvailableEmojis(CategoryEmoji category) async {
-    var available =
-        (await _platform.invokeListMethod<bool>('getSupportedEmojis', {
-          'source': category.emoji.map((e) => e.emoji).toList(growable: false),
-        }))!;
+    var available = (await _platform.invokeListMethod<bool>(
+      'getSupportedEmojis',
+      {'source': category.emoji.map((e) => e.emoji).toList(growable: false)},
+    ))!;
 
     return category.copyWith(
       emoji: [

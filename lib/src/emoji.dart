@@ -33,8 +33,9 @@ class Emoji {
     return Emoji(
       json['emoji'] as String,
       json['name'] as String,
-      hasSkinTone:
-          json['hasSkinTone'] != null ? json['hasSkinTone'] as bool : false,
+      hasSkinTone: json['hasSkinTone'] != null
+          ? json['hasSkinTone'] as bool
+          : false,
     );
   }
 

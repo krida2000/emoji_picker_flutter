@@ -23,10 +23,9 @@ class _TriangleShapePainter extends BoxPainter {
   /// Expects color that the triangle will be filled with and
   /// size of the triangle
   _TriangleShapePainter(Color color, double size) {
-    _painter =
-        Paint()
-          ..color = color
-          ..style = PaintingStyle.fill;
+    _painter = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
     _size = size;
   }
 
@@ -38,13 +37,12 @@ class _TriangleShapePainter extends BoxPainter {
     // per documentation, the size should be always not null here, no need
     // for null checks
     final s = configuration.size!;
-    var path =
-        Path()
-          ..moveTo(s.width + offset.dx, s.height - _size + offset.dy)
-          ..lineTo(s.width - _size + offset.dx, s.height + offset.dy)
-          ..lineTo(s.width + offset.dx, s.height + offset.dy)
-          ..lineTo(s.width + offset.dx, s.height - _size + offset.dy)
-          ..close();
+    var path = Path()
+      ..moveTo(s.width + offset.dx, s.height - _size + offset.dy)
+      ..lineTo(s.width - _size + offset.dx, s.height + offset.dy)
+      ..lineTo(s.width + offset.dx, s.height + offset.dy)
+      ..lineTo(s.width + offset.dx, s.height - _size + offset.dy)
+      ..close();
 
     canvas.drawPath(path, _painter);
   }

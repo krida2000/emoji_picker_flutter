@@ -46,10 +46,9 @@ class EmojiPickerUtils {
 
       final data = [...emojiSet]
         ..removeWhere((e) => e.category == Category.RECENT);
-      final availableCategoryEmoji =
-          checkPlatformCompatibility
-              ? await emojiPickerInternalUtils.filterUnsupported(data)
-              : data;
+      final availableCategoryEmoji = checkPlatformCompatibility
+          ? await emojiPickerInternalUtils.filterUnsupported(data)
+          : data;
 
       // Set all the emoji entities
       for (var emojis in availableCategoryEmoji) {
@@ -58,19 +57,19 @@ class EmojiPickerUtils {
     }
 
     // Split the input string into a list of lowercase keywords
-    final keywordSet =
-        search
-            .split(RegExp(r'\s+'))
-            .where((e) => e.isNotEmpty)
-            .map((e) => e.toLowerCase())
-            .toSet();
+    final keywordSet = search
+        .split(RegExp(r'\s+'))
+        .where((e) => e.isNotEmpty)
+        .map((e) => e.toLowerCase())
+        .toSet();
 
     if (keywordSet.isEmpty) return [];
 
     return _allAvailableEmojiEntities.where((emoji) {
       // Perform lowercasing of emoji keywords once
-      final emojiKeywordSet =
-          emoji.keywords.map((e) => e.toLowerCase()).toSet();
+      final emojiKeywordSet = emoji.keywords
+          .map((e) => e.toLowerCase())
+          .toSet();
 
       // Check if first keyword is a prefix of any emoji keyword
       final matchFirstKeyword = emojiKeywordSet.any(
@@ -178,12 +177,11 @@ class EmojiPickerUtils {
   /// Applies skin tone to given emoji
   Emoji applySkinTone(Emoji emoji, String color) {
     final codeUnits = emoji.emoji.codeUnits;
-    var result =
-        List<int>.empty(growable: true)
-          // Basic emoji without gender (until char 2)
-          ..addAll(codeUnits.sublist(0, min(codeUnits.length, 2)))
-          // Skin tone
-          ..addAll(color.codeUnits);
+    var result = List<int>.empty(growable: true)
+      // Basic emoji without gender (until char 2)
+      ..addAll(codeUnits.sublist(0, min(codeUnits.length, 2)))
+      // Skin tone
+      ..addAll(color.codeUnits);
     // add the rest of the emoji (gender, etc.) again
     if (codeUnits.length >= 2) {
       result.addAll(codeUnits.sublist(2));
