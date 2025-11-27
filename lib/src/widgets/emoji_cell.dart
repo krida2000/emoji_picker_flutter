@@ -86,16 +86,12 @@ class EmojiCell extends StatelessWidget {
       );
     }
 
-    return SizedBox(
-      width: emojiBoxSize,
-      height: emojiBoxSize,
-      child: _buildButtonWidget(
-        onPressed: onPressed,
-        onLongPressed: onLongPressed,
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: _buildEmoji(),
-        ),
+    return _buildButtonWidget(
+      onPressed: onPressed,
+      onLongPressed: onLongPressed,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: _buildEmoji(),
       ),
     );
   }
@@ -112,7 +108,7 @@ class EmojiCell extends StatelessWidget {
         onLongPress: onLongPressed,
         elevation: 0,
         highlightElevation: 0,
-        padding: EdgeInsets.zero,
+        padding: const EdgeInsets.all(5),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.zero,
         ),
@@ -143,6 +139,10 @@ class EmojiCell extends StatelessWidget {
       emoji.emoji,
       textScaler: const TextScaler.linear(1.0),
       style: _getEmojiTextStyle(),
+      textHeightBehavior: const TextHeightBehavior(
+        applyHeightToLastDescent: false,
+        applyHeightToFirstAscent: false,
+      ),
     );
 
     return emoji.hasSkinTone &&

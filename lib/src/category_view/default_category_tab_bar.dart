@@ -9,7 +9,8 @@ class DefaultCategoryTabBar extends StatelessWidget {
     this.tabController,
     this.pageController,
     this.categoryEmojis,
-    this.closeSkinToneOverlay, {
+    this.closeSkinToneOverlay,
+    this.onTap, {
     super.key,
   });
 
@@ -28,6 +29,9 @@ class DefaultCategoryTabBar extends StatelessWidget {
   /// Close skin tone overlay callback
   final VoidCallback closeSkinToneOverlay;
 
+  /// Callback called when a tab item is tapped
+  final void Function(int i) onTap;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -41,7 +45,7 @@ class DefaultCategoryTabBar extends StatelessWidget {
         labelPadding: EdgeInsets.zero,
         onTap: (index) {
           closeSkinToneOverlay();
-          pageController.jumpToPage(index);
+          onTap(index);
         },
         tabs: categoryEmojis
             .asMap()

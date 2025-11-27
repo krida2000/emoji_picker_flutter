@@ -9,7 +9,8 @@ abstract class CategoryView extends StatefulWidget {
     this.config,
     this.state,
     this.tabController,
-    this.pageController, {
+    this.pageController,
+    this.onTap, {
     super.key,
   });
 
@@ -24,6 +25,9 @@ abstract class CategoryView extends StatefulWidget {
 
   /// Page Controller of Emoji view
   final PageController pageController;
+
+  /// Callback called when a tab item is tapped
+  final void Function(int i) onTap;
 }
 
 /// Returns the icon for the category

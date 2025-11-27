@@ -83,6 +83,22 @@ class EmojiViewConfig {
     return availableWidth / columns;
   }
 
+  /// Gets columns count based on screen width and emoji size
+  int getColumns(double width) {
+    width -= emojiSizeMax;
+    width = width - gridPadding.left - gridPadding.right;
+
+    return (width / (emojiSizeMax + horizontalSpacing)).floor() + 1;
+  }
+
+  /// Gets real emoji size based on column count, screen width and paddings
+  double getRealEmojiSize(double width, int columns) {
+    width = width - gridPadding.left - gridPadding.right;
+    width = width - (horizontalSpacing * (columns - 1));
+
+    return width / columns;
+  }
+
   @override
   bool operator ==(other) {
     return (other is EmojiViewConfig) &&
