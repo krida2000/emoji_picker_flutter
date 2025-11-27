@@ -1,8 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' hide Category;
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,6 +16,8 @@ const initVal = 1;
 class EmojiPickerInternalUtils {
   // Establish communication with native
   static const _platform = MethodChannel('emoji_picker_flutter');
+
+  static final Map<Category, CategoryEmoji> _availableEmojis = {};
 
   // Get available emoji for given category title
   Future<CategoryEmoji> _getAvailableEmojis(CategoryEmoji category) async {
@@ -30,13 +33,28 @@ class EmojiPickerInternalUtils {
   }
 
   /// Filters out emojis not supported on the platform
-  Future<List<CategoryEmoji>> filterUnsupported(
-      List<CategoryEmoji> data) async {
+  FutureOr<List<CategoryEmoji>> filterUnsupported(List<CategoryEmoji> data) {
     if (kIsWeb || !Platform.isAndroid) {
       return data;
     }
-    final futures = [for (final cat in data) _getAvailableEmojis(cat)];
-    return await Future.wait(futures);
+
+    if (data.every((e) => _availableEmojis.containsKey(e.category))) {
+      return data.map((e) => _availableEmojis[e.category]!).toList();
+    }
+
+    return Future(() async {
+      final futures = [
+        for (final cat
+            in data.where((e) => !_availableEmojis.containsKey(e.category)))
+          _getAvailableEmojis(cat)
+      ];
+
+      for (final cat in await Future.wait(futures)) {
+        _availableEmojis[cat.category] = cat;
+      }
+
+      return data.map((e) => _availableEmojis[e.category]!).toList();
+    });
   }
 
   /// Returns list of recently used emoji from cache

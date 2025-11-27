@@ -403,9 +403,20 @@ class EmojiPickerState extends State<EmojiPicker> {
     }
     final data = widget.config.emojiSet?.call(widget.config.locale) ??
         getDefaultEmojiLocale(widget.config.locale);
-    _categoryEmoji.addAll(widget.config.checkPlatformCompatibility
-        ? await _emojiPickerInternalUtils.filterUnsupported(data)
-        : data);
+
+    if (widget.config.checkPlatformCompatibility) {
+      final futureOrCategories =
+          _emojiPickerInternalUtils.filterUnsupported(data);
+
+      if (futureOrCategories is List<CategoryEmoji>) {
+        _categoryEmoji.addAll(futureOrCategories);
+      } else {
+        _categoryEmoji.addAll(await futureOrCategories);
+      }
+    } else {
+      _categoryEmoji.addAll(data);
+    }
+
     _state = EmojiViewState(
       _categoryEmoji,
       _onEmojiSelected,
