@@ -218,6 +218,7 @@ class MyAppState extends State<MyApp> {
                                 state,
                                 tabController,
                                 pageController,
+                                (_) {},
                               );
                             },
                             categoryIcons: const CategoryIcons(
@@ -277,7 +278,8 @@ class WhatsAppCategoryView extends CategoryView {
     super.config,
     super.state,
     super.tabController,
-    super.pageController, {
+    super.pageController,
+    super.onTap, {
     super.key,
   });
 

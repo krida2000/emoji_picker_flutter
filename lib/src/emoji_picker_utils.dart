@@ -25,7 +25,7 @@ class EmojiPickerUtils {
   RegExp? _emojiRegExp;
 
   /// Returns list of recently used emoji from cache
-  Future<List<RecentEmoji>> getRecentEmojis() async {
+  FutureOr<List<RecentEmoji>> getRecentEmojis() {
     return EmojiPickerInternalUtils().getRecentEmojis();
   }
 

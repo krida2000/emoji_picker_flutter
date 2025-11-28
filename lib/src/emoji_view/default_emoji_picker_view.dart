@@ -158,7 +158,7 @@ class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
 
               _scrollController.animateTo(
                 offset,
-                duration: Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 200),
                 curve: Curves.linear,
               );
             },

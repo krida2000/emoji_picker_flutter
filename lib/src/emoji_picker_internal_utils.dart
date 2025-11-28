@@ -19,6 +19,8 @@ class EmojiPickerInternalUtils {
 
   static final Map<Category, CategoryEmoji> _availableEmojis = {};
 
+  static List<RecentEmoji>? _recentEmojis;
+
   // Get available emoji for given category title
   Future<CategoryEmoji> _getAvailableEmojis(CategoryEmoji category) async {
     var available = (await _platform.invokeListMethod<bool>(
@@ -58,14 +60,21 @@ class EmojiPickerInternalUtils {
   }
 
   /// Returns list of recently used emoji from cache
-  Future<List<RecentEmoji>> getRecentEmojis() async {
-    final prefs = await SharedPreferences.getInstance();
-    var emojiJson = prefs.getString('recent');
-    if (emojiJson == null) {
-      return [];
+  FutureOr<List<RecentEmoji>> getRecentEmojis() {
+    if (_recentEmojis != null) {
+      return _recentEmojis!.toList();
     }
-    var json = jsonDecode(emojiJson) as List<dynamic>;
-    return json.map<RecentEmoji>(RecentEmoji.fromJson).toList();
+
+    return Future(() async {
+      final prefs = await SharedPreferences.getInstance();
+      var emojiJson = prefs.getString('recent');
+      if (emojiJson == null) {
+        return [];
+      }
+      var json = jsonDecode(emojiJson) as List<dynamic>;
+      _recentEmojis = json.map<RecentEmoji>(RecentEmoji.fromJson).toList();
+      return _recentEmojis!;
+    });
   }
 
   /// Add an emoji to recently used list
@@ -75,7 +84,7 @@ class EmojiPickerInternalUtils {
     if (emoji.hasSkinTone) {
       emoji = removeSkinTone(emoji);
     }
-    var recentEmoji = await getRecentEmojis();
+    var recentEmoji = _recentEmojis ?? await getRecentEmojis();
     var recentEmojiIndex =
         recentEmoji.indexWhere((element) => element.emoji.emoji == emoji.emoji);
     if (recentEmojiIndex != -1) {
@@ -104,7 +113,7 @@ class EmojiPickerInternalUtils {
     if (emoji.hasSkinTone) {
       emoji = removeSkinTone(emoji);
     }
-    var recentEmoji = await getRecentEmojis();
+    var recentEmoji = _recentEmojis ?? await getRecentEmojis();
     var recentEmojiIndex =
         recentEmoji.indexWhere((element) => element.emoji.emoji == emoji.emoji);
     if (recentEmojiIndex != -1) {
