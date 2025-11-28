@@ -7,6 +7,7 @@ class DefaultCategoryTabBar extends StatelessWidget {
   const DefaultCategoryTabBar(
     this.config,
     this.tabController,
+    this.pageController,
     this.categoryEmojis,
     this.closeSkinToneOverlay,
     this.onTap, {
@@ -19,12 +20,16 @@ class DefaultCategoryTabBar extends StatelessWidget {
   /// Tab controller
   final TabController tabController;
 
+  /// Page controller
+  final PageController pageController;
+
   /// Category emojis
   final List<CategoryEmoji> categoryEmojis;
 
   /// Close skin tone overlay callback
   final VoidCallback closeSkinToneOverlay;
 
+  /// Callback called when a tab item is tapped
   final void Function(int i) onTap;
 
   @override
@@ -46,8 +51,7 @@ class DefaultCategoryTabBar extends StatelessWidget {
             .asMap()
             .entries
             .map<Widget>(
-              (item) => _buildCategoryTab(item.key, item.value.category),
-            )
+                (item) => _buildCategoryTab(item.key, item.value.category))
             .toList(),
       ),
     );

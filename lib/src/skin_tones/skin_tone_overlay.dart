@@ -19,7 +19,10 @@ mixin SkinToneOverlayStateMixin<T extends StatefulWidget> on State<T> {
   }) {
     if (hasSkinTone) {
       final link = links.putIfAbsent(linkKey, LayerLink.new);
-      return CompositedTransformTarget(link: link, child: child);
+      return CompositedTransformTarget(
+        link: link,
+        child: child,
+      );
     }
     return child;
   }

@@ -26,6 +26,7 @@ abstract class CategoryView extends StatefulWidget {
   /// Page Controller of Emoji view
   final PageController pageController;
 
+  /// Callback called when a tab item is tapped
   final void Function(int i) onTap;
 }
 

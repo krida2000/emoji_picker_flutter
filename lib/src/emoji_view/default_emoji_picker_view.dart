@@ -4,12 +4,8 @@ import 'package:flutter/material.dart';
 /// Default EmojiPicker Implementation
 class DefaultEmojiPickerView extends EmojiPickerView {
   /// Constructor
-  const DefaultEmojiPickerView(
-    super.config,
-    super.state,
-    super.showSearchBar, {
-    super.key,
-  });
+  const DefaultEmojiPickerView(super.config, super.state, super.showSearchBar,
+      {super.key});
 
   @override
   State<DefaultEmojiPickerView> createState() => _DefaultEmojiPickerViewState();
@@ -18,9 +14,7 @@ class DefaultEmojiPickerView extends EmojiPickerView {
 class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
     with SingleTickerProviderStateMixin, SkinToneOverlayStateMixin {
   late TabController _tabController;
-
   late PageController _pageController;
-
   final _scrollController = ScrollController();
 
   double _emojiSize = 0;
@@ -31,18 +25,20 @@ class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
 
   @override
   void initState() {
-    var initCategory = widget.state.categoryEmoji.indexWhere(
-      (element) =>
-          element.category == widget.config.categoryViewConfig.initCategory,
-    );
+    // Use controller's current category if available,
+    // otherwise use config's initCategory
+    final targetCategory = widget.state.currentCategory ??
+        widget.config.categoryViewConfig.initCategory;
+
+    var initCategory = widget.state.categoryEmoji
+        .indexWhere((element) => element.category == targetCategory);
     if (initCategory == -1) {
       initCategory = 0;
     }
     _tabController = TabController(
-      initialIndex: initCategory,
-      length: widget.state.categoryEmoji.length,
-      vsync: this,
-    );
+        initialIndex: initCategory,
+        length: widget.state.categoryEmoji.length,
+        vsync: this);
     _pageController = PageController(initialPage: initCategory)
       ..addListener(closeSkinToneOverlay);
     _scrollController.addListener(closeSkinToneOverlay);
@@ -53,7 +49,7 @@ class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
       for (int i = 0; i < widget.state.categoryEmoji.length; i++) {
         categoryOffset +=
             (widget.state.categoryEmoji[i].emoji.length / _columns).ceil() *
-            (_emojiSize + widget.config.emojiViewConfig.verticalSpacing);
+                (_emojiSize + widget.config.emojiViewConfig.verticalSpacing);
 
         if (offset < categoryOffset) {
           _tabController.index = i;
@@ -63,6 +59,24 @@ class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
     });
     _recentEmoji = widget.state.categoryEmoji.first;
     super.initState();
+  }
+
+  void _onCategoryNavigationChanged() {
+    final targetCategory = widget.state.categoryNavigationNotifier.value;
+    if (targetCategory != null) {
+      final index = widget.state.categoryEmoji
+          .indexWhere((element) => element.category == targetCategory);
+      if (index != -1) {
+        final currentPage = _pageController.page?.round();
+        if (index != currentPage) {
+          // Use jumpToPage for instant navigation without building
+          // intermediate pages. This prevents performance issues when
+          // jumping to tabs far away. The onPageChanged callback will
+          // handle animating the tab indicator
+          _pageController.jumpToPage(index);
+        }
+      }
+    }
   }
 
   @override
@@ -90,25 +104,28 @@ class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
           color: widget.config.emojiViewConfig.backgroundColor,
           buttonMode: widget.config.emojiViewConfig.buttonMode,
           child: Column(
-            children:
-                [
-                  widget.config.viewOrderConfig.top,
-                  widget.config.viewOrderConfig.middle,
-                  widget.config.viewOrderConfig.bottom,
-                ].map((item) {
-                  switch (item) {
-                    case EmojiPickerItem.categoryBar:
-                      return _buildCategoryView(
-                        emojiSize +
-                            widget.config.emojiViewConfig.verticalSpacing,
-                        _columns,
-                      );
-                    case EmojiPickerItem.emojiView:
-                      return _buildEmojiView(emojiSize, emojiBoxSize, _columns);
-                    case EmojiPickerItem.searchBar:
-                      return SizedBox();
-                  }
-                }).toList(),
+            children: [
+              widget.config.viewOrderConfig.top,
+              widget.config.viewOrderConfig.middle,
+              widget.config.viewOrderConfig.bottom,
+            ].map(
+              (item) {
+                switch (item) {
+                  case EmojiPickerItem.categoryBar:
+                    // Category view
+                    return _buildCategoryView(
+                      emojiSize + widget.config.emojiViewConfig.verticalSpacing,
+                      _columns,
+                    );
+                  case EmojiPickerItem.emojiView:
+                    // Emoji view
+                    return _buildEmojiView(emojiSize, emojiBoxSize, _columns);
+                  case EmojiPickerItem.searchBar:
+                    // Search Bar
+                    return const SizedBox();
+                }
+              },
+            ).toList(),
           ),
         );
       },
@@ -134,14 +151,14 @@ class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
               for (int i = 0; i < index; i++) {
                 offset +=
                     (widget.state.categoryEmoji[i].emoji.length / columnsCount)
-                        .ceil() *
-                    (_emojiSize +
-                        widget.config.emojiViewConfig.verticalSpacing);
+                            .ceil() *
+                        (_emojiSize +
+                            widget.config.emojiViewConfig.verticalSpacing);
               }
 
               _scrollController.animateTo(
                 offset,
-                duration: Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 200),
                 curve: Curves.linear,
               );
             },
@@ -175,6 +192,23 @@ class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
     );
   }
 
+  Widget _buildBottomSearchBar() {
+    if (!widget.config.bottomActionBarConfig.enabled) {
+      return const SizedBox.shrink();
+    }
+    return widget.config.bottomActionBarConfig.customBottomActionBar != null
+        ? widget.config.bottomActionBarConfig.customBottomActionBar!(
+            widget.config,
+            widget.state,
+            widget.showSearchBar,
+          )
+        : DefaultBottomActionBar(
+            widget.config,
+            widget.state,
+            widget.showSearchBar,
+          );
+  }
+
   Widget _buildPage(
     double emojiSize,
     double emojiBoxSize,
@@ -185,8 +219,7 @@ class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
       categoryEmoji = _recentEmoji;
     }
 
-    final crossAxisSpacing =
-        widget.config.emojiViewConfig.horizontalSpacing -
+    final crossAxisSpacing = widget.config.emojiViewConfig.horizontalSpacing -
         (columnsCount * 10 / (columnsCount - 1));
 
     // Build page normally
@@ -223,6 +256,13 @@ class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
           );
         },
       ),
+    );
+  }
+
+  /// Build Widget for when no recent emoji are available
+  Widget _buildNoRecent() {
+    return Center(
+      child: widget.config.emojiViewConfig.noRecents,
     );
   }
 

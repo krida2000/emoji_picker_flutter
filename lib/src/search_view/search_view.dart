@@ -5,7 +5,12 @@ import 'package:flutter/material.dart';
 /// Inhert this class to create your own search view
 abstract class SearchView extends StatefulWidget {
   /// Constructor
-  const SearchView(this.config, this.state, this.showEmojiView, {super.key});
+  const SearchView(
+    this.config,
+    this.state,
+    this.showEmojiView, {
+    super.key,
+  });
 
   /// Config for customizations
   final Config config;
@@ -36,13 +41,17 @@ class SearchViewState<T extends SearchView> extends State<T>
       // Auto focus textfield
       FocusScope.of(context).requestFocus(focusNode);
       // Load recent emojis initially
-      utils
-          .getRecentEmojis(widget.config)
-          .then(
-            (value) => setState(
-              () => _updateResults(value.map((e) => e.emoji).toList()),
-            ),
-          );
+      final futureOrRecent = utils.getRecentEmojis();
+
+      if (futureOrRecent is List<RecentEmoji>) {
+        _updateResults(futureOrRecent.map((e) => e.emoji).toList());
+      } else {
+        futureOrRecent.then(
+          (value) => setState(
+            () => _updateResults(value.map((e) => e.emoji).toList()),
+          ),
+        );
+      }
     });
     super.initState();
   }
@@ -51,9 +60,11 @@ class SearchViewState<T extends SearchView> extends State<T>
   void onTextInputChanged(String text) {
     links.clear();
     results.clear();
-    utils
-        .searchEmoji(text, widget.state.categoryEmoji)
-        .then((value) => setState(() => _updateResults(value)));
+    utils.searchEmoji(text, widget.state.categoryEmoji).then(
+          (value) => setState(
+            () => _updateResults(value),
+          ),
+        );
   }
 
   void _updateResults(List<Emoji> emojis) {
@@ -78,20 +89,20 @@ class SearchViewState<T extends SearchView> extends State<T>
         config: widget.config,
         onSkinToneDialogRequested:
             (emojiBoxPosition, emoji, emojiSize, category) {
-              closeSkinToneOverlay();
-              if (!emoji.hasSkinTone || !widget.config.skinToneConfig.enabled) {
-                return;
-              }
-              showSkinToneOverlay(
-                emojiBoxPosition,
-                emoji,
-                emojiSize,
-                null, // Todo: check if we can provide the category
-                widget.config,
-                _onSkinTonedEmojiSelected,
-                links[emoji.emoji]!,
-              );
-            },
+          closeSkinToneOverlay();
+          if (!emoji.hasSkinTone || !widget.config.skinToneConfig.enabled) {
+            return;
+          }
+          showSkinToneOverlay(
+            emojiBoxPosition,
+            emoji,
+            emojiSize,
+            null, // Todo: check if we can provide the category
+            widget.config,
+            _onSkinTonedEmojiSelected,
+            links[emoji.emoji]!,
+          );
+        },
       ),
     );
   }

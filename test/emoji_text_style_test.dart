@@ -12,7 +12,9 @@ void main() {
             final result = EmojiPickerUtils().setEmojiTextStyle(
               text,
               emojiStyle: const TextStyle(color: Colors.red),
-              parentStyle: const TextStyle(color: Colors.black),
+              parentStyle: const TextStyle(
+                color: Colors.black,
+              ),
             );
 
             expect(result.length, 3);
@@ -20,10 +22,8 @@ void main() {
             expect(result[0].style?.color, Colors.black);
             // Emoji
             expect(result[1].style?.color, Colors.red);
-            expect(
-              result[1].style?.fontFamilyFallback,
-              DefaultEmojiTextStyle.fontFamilyFallback,
-            );
+            expect(result[1].style?.fontFamilyFallback,
+                DefaultEmojiTextStyle.fontFamilyFallback);
             // World
             expect(result[2].style?.color, Colors.black);
 

@@ -23,19 +23,19 @@ class EmojiCell extends StatelessWidget {
 
   /// Constructor that can retrieve as much information as possible from
   /// [Config]
-  EmojiCell.fromConfig({
-    super.key,
-    required this.emoji,
-    required this.emojiSize,
-    required this.emojiBoxSize,
-    this.categoryEmoji,
-    required this.onEmojiSelected,
-    this.onSkinToneDialogRequested,
-    required Config config,
-  }) : buttonMode = config.emojiViewConfig.buttonMode,
-       enableSkinTones = config.skinToneConfig.enabled,
-       textStyle = config.emojiTextStyle,
-       skinToneIndicatorColor = config.skinToneConfig.indicatorColor;
+  EmojiCell.fromConfig(
+      {super.key,
+      required this.emoji,
+      required this.emojiSize,
+      required this.emojiBoxSize,
+      this.categoryEmoji,
+      required this.onEmojiSelected,
+      this.onSkinToneDialogRequested,
+      required Config config})
+      : buttonMode = config.emojiViewConfig.buttonMode,
+        enableSkinTones = config.skinToneConfig.enabled,
+        textStyle = config.emojiTextStyle,
+        skinToneIndicatorColor = config.skinToneConfig.indicatorColor;
 
   /// Emoji to display as the cell content
   final Emoji emoji;
@@ -46,7 +46,7 @@ class EmojiCell extends StatelessWidget {
   /// Hitbox of emoji cell
   final double emojiBoxSize;
 
-  /// Optional category that will be passed through to callbacks
+  /// Optinonal category that will be passed through to callbacks
   final CategoryEmoji? categoryEmoji;
 
   /// Visual tap feedback, see [ButtonMode] for options
@@ -89,7 +89,10 @@ class EmojiCell extends StatelessWidget {
     return _buildButtonWidget(
       onPressed: onPressed,
       onLongPressed: onLongPressed,
-      child: _buildEmoji(),
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: _buildEmoji(),
+      ),
     );
   }
 
@@ -105,12 +108,13 @@ class EmojiCell extends StatelessWidget {
         onLongPress: onLongPressed,
         elevation: 0,
         highlightElevation: 0,
-        padding: EdgeInsets.all(5),
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        padding: const EdgeInsets.all(5),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero,
+        ),
         child: child,
       );
     }
-
     if (buttonMode == ButtonMode.CUPERTINO) {
       return GestureDetector(
         onLongPress: onLongPressed,
@@ -122,7 +126,6 @@ class EmojiCell extends StatelessWidget {
         ),
       );
     }
-
     return GestureDetector(
       onLongPress: onLongPressed,
       onTap: onPressed,
@@ -136,7 +139,7 @@ class EmojiCell extends StatelessWidget {
       emoji.emoji,
       textScaler: const TextScaler.linear(1.0),
       style: _getEmojiTextStyle(),
-      textHeightBehavior: TextHeightBehavior(
+      textHeightBehavior: const TextHeightBehavior(
         applyHeightToLastDescent: false,
         applyHeightToFirstAscent: false,
       ),

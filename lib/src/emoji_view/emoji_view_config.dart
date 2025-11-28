@@ -4,15 +4,13 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 
 /// Callback function for custom view
-typedef EmojiViewBuilder =
-    Widget Function(
-      Config config,
-      EmojiViewState state,
-      VoidCallback showSearchBar,
-    );
+typedef EmojiViewBuilder = Widget Function(
+  Config config,
+  EmojiViewState state,
+  VoidCallback showSearchBar,
+);
 
 /// Default Widget if no recent is available
-// ignore: constant_identifier_names
 const DefaultNoRecentsWidget = Text(
   'No Recents',
   style: TextStyle(fontSize: 20, color: Colors.black26),
@@ -74,15 +72,18 @@ class EmojiViewConfig {
 
   /// Get Emoji size based on properties and screen width
   double getEmojiSize(double width) {
-    final maxSize = width / columns;
+    final maxSize = getEmojiBoxSize(width);
     return min(maxSize, emojiSizeMax);
   }
 
   /// Get Emoji hitbox size based on properties and screen width
   double getEmojiBoxSize(double width) {
-    return width / columns;
+    final totalHorizontalSpacing = (columns - 1) * horizontalSpacing;
+    final availableWidth = width - totalHorizontalSpacing;
+    return availableWidth / columns;
   }
 
+  /// Gets columns count based on screen width and emoji size
   int getColumns(double width) {
     width -= emojiSizeMax;
     width = width - gridPadding.left - gridPadding.right;
@@ -90,6 +91,7 @@ class EmojiViewConfig {
     return (width / (emojiSizeMax + horizontalSpacing)).floor() + 1;
   }
 
+  /// Gets real emoji size based on column count, screen width and paddings
   double getRealEmojiSize(double width, int columns) {
     width = width - gridPadding.left - gridPadding.right;
     width = width - (horizontalSpacing * (columns - 1));

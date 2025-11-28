@@ -29,6 +29,7 @@ class DefaultCategoryViewState extends CategoryViewState {
             child: DefaultCategoryTabBar(
               widget.config,
               widget.tabController,
+              widget.pageController,
               widget.state.categoryEmoji,
               closeSkinToneOverlay,
               widget.onTap,
