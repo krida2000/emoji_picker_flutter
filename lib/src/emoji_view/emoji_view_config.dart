@@ -104,7 +104,14 @@ class EmojiViewConfig {
     return (other is EmojiViewConfig) &&
         other.columns == columns &&
         other.emojiSizeMax == emojiSizeMax &&
-        other.backgroundColor == backgroundColor &&
+        (other.backgroundColor.a * 255.0).round().clamp(0, 255) ==
+            (backgroundColor.a * 255.0).round().clamp(0, 255) &&
+        (other.backgroundColor.r * 255.0).round().clamp(0, 255) ==
+            (backgroundColor.r * 255.0).round().clamp(0, 255) &&
+        (other.backgroundColor.g * 255.0).round().clamp(0, 255) ==
+            (backgroundColor.g * 255.0).round().clamp(0, 255) &&
+        (other.backgroundColor.b * 255.0).round().clamp(0, 255) ==
+            (backgroundColor.b * 255.0).round().clamp(0, 255) &&
         other.verticalSpacing == verticalSpacing &&
         other.horizontalSpacing == horizontalSpacing &&
         other.recentsLimit == recentsLimit &&
