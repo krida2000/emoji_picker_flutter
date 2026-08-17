@@ -277,11 +277,9 @@ class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
             widget.config.skinToneConfig,
             _rememberedSkinTone,
           );
-        
           return addSkinToneTargetIfAvailable(
             hasSkinTone: displayEmoji.hasSkinTone,
-            linkKey:
-                displayEmoji.category.name + displayEmoji.emoji,
+            linkKey: categoryEmoji.category.name + displayEmoji.emoji,
             child: EmojiCell.fromConfig(
               emoji: displayEmoji,
               emojiSize: emojiSize,

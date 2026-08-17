@@ -18,8 +18,6 @@ class EmojiPickerInternalUtils {
   static const _platform = MethodChannel('emoji_picker_flutter');
 
   static final Map<Category, CategoryEmoji> _availableEmojis = {};
-
-  static List<RecentEmoji>? _recentEmojis;
   
   static final RegExp _skinToneRegExp = RegExp(SkinTone.values.join('|'));
 

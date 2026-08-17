@@ -8,6 +8,14 @@ analyzer:
     close_sinks: ignore
     constant_identifier_names: ignore
     no_leading_underscores_for_local_identifiers: ignore
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 
 linter:
   rules:
