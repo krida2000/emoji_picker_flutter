@@ -21,6 +21,7 @@ class EmojiPickerUtils {
   EmojiPickerUtils._internal();
 
   static final EmojiPickerUtils _singleton = EmojiPickerUtils._internal();
+  static final RegExp _whitespaceRegExp = RegExp(r'\s+');
   final List<Emoji> _allAvailableEmojiEntities = [];
   RegExp? _emojiRegExp;
 
@@ -67,7 +68,7 @@ class EmojiPickerUtils {
 
     // Split the input string into a list of lowercase keywords
     final keywordSet = search
-        .split(RegExp(r'\s+'))
+        .split(_whitespaceRegExp)
         .where((e) => e.isNotEmpty)
         .map((e) => e.toLowerCase())
         .toSet();
@@ -195,6 +196,6 @@ class EmojiPickerUtils {
   /// Returns the emoji regex
   /// Based on https://unicode.org/reports/tr51/
   RegExp getEmojiRegex() {
-    return _emojiRegExp ?? RegExp(EmojiRegex, unicode: true);
+    return _emojiRegExp ??= RegExp(EmojiRegex, unicode: true);
   }
 }

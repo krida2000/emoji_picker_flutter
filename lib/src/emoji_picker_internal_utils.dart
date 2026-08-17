@@ -20,6 +20,8 @@ class EmojiPickerInternalUtils {
   static final Map<Category, CategoryEmoji> _availableEmojis = {};
 
   static List<RecentEmoji>? _recentEmojis;
+  
+  static final RegExp _skinToneRegExp = RegExp(SkinTone.values.join('|'));
 
   // Get available emoji for given category title
   Future<CategoryEmoji> _getAvailableEmojis(CategoryEmoji category) async {
@@ -151,10 +153,7 @@ class EmojiPickerInternalUtils {
   /// Remove skin tone from given emoji
   Emoji removeSkinTone(Emoji emoji) {
     return emoji.copyWith(
-      emoji: emoji.emoji.replaceFirst(
-        RegExp(SkinTone.values.join('|')),
-        '',
-      ),
+      emoji: emoji.emoji.replaceFirst(_skinToneRegExp, ''),
     );
   }
 }
