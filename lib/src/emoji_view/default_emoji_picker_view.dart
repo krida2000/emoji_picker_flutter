@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 /// Default EmojiPicker Implementation
 class DefaultEmojiPickerView extends EmojiPickerView {
   /// Constructor
-  const DefaultEmojiPickerView(super.config, super.state, super.showSearchBar,
-      {super.key});
+  const DefaultEmojiPickerView(
+    super.config,
+    super.state,
+    super.showSearchBar, {
+    super.key,
+  });
 
   @override
   State<DefaultEmojiPickerView> createState() => _DefaultEmojiPickerViewState();
@@ -27,18 +31,21 @@ class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
   void initState() {
     // Use controller's current category if available,
     // otherwise use config's initCategory
-    final targetCategory = widget.state.currentCategory ??
+    final targetCategory =
+        widget.state.currentCategory ??
         widget.config.categoryViewConfig.initCategory;
 
-    var initCategory = widget.state.categoryEmoji
-        .indexWhere((element) => element.category == targetCategory);
+    var initCategory = widget.state.categoryEmoji.indexWhere(
+      (element) => element.category == targetCategory,
+    );
     if (initCategory == -1) {
       initCategory = 0;
     }
     _tabController = TabController(
-        initialIndex: initCategory,
-        length: widget.state.categoryEmoji.length,
-        vsync: this);
+      initialIndex: initCategory,
+      length: widget.state.categoryEmoji.length,
+      vsync: this,
+    );
     _pageController = PageController(initialPage: initCategory)
       ..addListener(closeSkinToneOverlay);
     _scrollController.addListener(closeSkinToneOverlay);
@@ -64,8 +71,9 @@ class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
   void _onCategoryNavigationChanged() {
     final targetCategory = widget.state.categoryNavigationNotifier.value;
     if (targetCategory != null) {
-      final index = widget.state.categoryEmoji
-          .indexWhere((element) => element.category == targetCategory);
+      final index = widget.state.categoryEmoji.indexWhere(
+        (element) => element.category == targetCategory,
+      );
       if (index != -1) {
         final currentPage = _pageController.page?.round();
         if (index != currentPage) {
@@ -103,29 +111,31 @@ class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
         return EmojiContainer(
           color: widget.config.emojiViewConfig.backgroundColor,
           buttonMode: widget.config.emojiViewConfig.buttonMode,
-          child: Column(
-            children: [
-              widget.config.viewOrderConfig.top,
-              widget.config.viewOrderConfig.middle,
-              widget.config.viewOrderConfig.bottom,
-            ].map(
-              (item) {
-                switch (item) {
-                  case EmojiPickerItem.categoryBar:
-                    // Category view
-                    return _buildCategoryView(
-                      emojiSize + widget.config.emojiViewConfig.verticalSpacing,
-                      _columns,
-                    );
-                  case EmojiPickerItem.emojiView:
-                    // Emoji view
-                    return _buildEmojiView(emojiSize, emojiBoxSize, _columns);
-                  case EmojiPickerItem.searchBar:
-                    // Search Bar
-                    return const SizedBox();
-                }
-              },
-            ).toList(),
+          child: ClipRect(
+            child: Column(
+              children: [
+                widget.config.viewOrderConfig.top,
+                widget.config.viewOrderConfig.middle,
+                widget.config.viewOrderConfig.bottom,
+              ].map(
+                (item) {
+                  switch (item) {
+                    case EmojiPickerItem.categoryBar:
+                      // Category view
+                      return _buildCategoryView(
+                        emojiSize + widget.config.emojiViewConfig.verticalSpacing,
+                        _columns,
+                      );
+                    case EmojiPickerItem.emojiView:
+                      // Emoji view
+                      return _buildEmojiView(emojiSize, emojiBoxSize, _columns);
+                    case EmojiPickerItem.searchBar:
+                      // Search Bar
+                      return const SizedBox();
+                  }
+                },
+              ).toList(),
+            ),
           ),
         );
       },
@@ -261,9 +271,7 @@ class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
 
   /// Build Widget for when no recent emoji are available
   Widget _buildNoRecent() {
-    return Center(
-      child: widget.config.emojiViewConfig.noRecents,
-    );
+    return Center(child: widget.config.emojiViewConfig.noRecents);
   }
 
   void _openSkinToneDialog(
