@@ -23,19 +23,19 @@ class EmojiCell extends StatelessWidget {
 
   /// Constructor that can retrieve as much information as possible from
   /// [Config]
-  EmojiCell.fromConfig(
-      {super.key,
-      required this.emoji,
-      required this.emojiSize,
-      required this.emojiBoxSize,
-      this.categoryEmoji,
-      required this.onEmojiSelected,
-      this.onSkinToneDialogRequested,
-      required Config config})
-      : buttonMode = config.emojiViewConfig.buttonMode,
-        enableSkinTones = config.skinToneConfig.enabled,
-        textStyle = config.emojiTextStyle,
-        skinToneIndicatorColor = config.skinToneConfig.indicatorColor;
+  EmojiCell.fromConfig({
+    super.key,
+    required this.emoji,
+    required this.emojiSize,
+    required this.emojiBoxSize,
+    this.categoryEmoji,
+    required this.onEmojiSelected,
+    this.onSkinToneDialogRequested,
+    required Config config,
+  }) : buttonMode = config.emojiViewConfig.buttonMode,
+       enableSkinTones = config.skinToneConfig.enabled,
+       textStyle = config.emojiTextStyle,
+       skinToneIndicatorColor = config.skinToneConfig.indicatorColor;
 
   /// Emoji to display as the cell content
   final Emoji emoji;

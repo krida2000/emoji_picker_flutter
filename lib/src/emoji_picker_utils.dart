@@ -35,8 +35,11 @@ class EmojiPickerUtils {
       EmojiPickerInternalUtils().filterUnsupported(data);
 
   /// Search for related emoticons based on keywords
-  Future<List<Emoji>> searchEmoji(String search, List<CategoryEmoji> emojiSet,
-      {bool checkPlatformCompatibility = true}) async {
+  Future<List<Emoji>> searchEmoji(
+    String search,
+    List<CategoryEmoji> emojiSet, {
+    bool checkPlatformCompatibility = true,
+  }) async {
     if (search.isEmpty) return [];
 
     if (_allAvailableEmojiEntities.isEmpty) {
@@ -77,20 +80,23 @@ class EmojiPickerUtils {
 
     return _allAvailableEmojiEntities.where((emoji) {
       // Perform lowercasing of emoji keywords once
-      final emojiKeywordSet =
-          emoji.keywords.map((e) => e.toLowerCase()).toSet();
+      final emojiKeywordSet = emoji.keywords
+          .map((e) => e.toLowerCase())
+          .toSet();
 
       // Check if first keyword is a prefix of any emoji keyword
-      final matchFirstKeyword = emojiKeywordSet
-          .any((emojiKeyword) => emojiKeyword.startsWith(keywordSet.first));
+      final matchFirstKeyword = emojiKeywordSet.any(
+        (emojiKeyword) => emojiKeyword.startsWith(keywordSet.first),
+      );
 
       var matchKeywords = false;
       if (matchFirstKeyword) {
         // Check if each search keyword is a prefix of any emoji keyword
         // start from second keyword, returns true if empty (only 1 keyword)
         matchKeywords = keywordSet.skip(1).every((keyword) {
-          return emojiKeywordSet
-              .any((emojiKeyword) => emojiKeyword.startsWith(keyword));
+          return emojiKeywordSet.any(
+            (emojiKeyword) => emojiKeyword.startsWith(keyword),
+          );
         });
       } else {
         matchKeywords = false;
@@ -111,8 +117,10 @@ class EmojiPickerUtils {
   }) async {
     return EmojiPickerInternalUtils()
         .addEmojiToRecentlyUsed(emoji: emoji, config: config)
-        .then((recentEmojiList) =>
-            key.currentState?.updateRecentEmoji(recentEmojiList));
+        .then(
+          (recentEmojiList) =>
+              key.currentState?.updateRecentEmoji(recentEmojiList),
+        );
   }
 
   /// Produce a list of spans to adjust style for emoji characters.
@@ -135,19 +143,27 @@ class EmojiPickerUtils {
       if (cursor != match.start) {
         // Non emoji text + following emoji
         spans
-          ..add(TextSpan(
-              text: text.substring(cursor, match.start), style: parentStyle))
-          ..add(TextSpan(
-            text: text.substring(match.start, match.end),
-            style: composedEmojiStyle,
-          ));
+          ..add(
+            TextSpan(
+              text: text.substring(cursor, match.start),
+              style: parentStyle,
+            ),
+          )
+          ..add(
+            TextSpan(
+              text: text.substring(match.start, match.end),
+              style: composedEmojiStyle,
+            ),
+          );
       } else {
         if (spans.isEmpty) {
           // Create new span if no previous emoji TextSpan exists
-          spans.add(TextSpan(
-            text: text.substring(match.start, match.end),
-            style: composedEmojiStyle,
-          ));
+          spans.add(
+            TextSpan(
+              text: text.substring(match.start, match.end),
+              style: composedEmojiStyle,
+            ),
+          );
         } else {
           // Update last span if current text is still emoji
           final lastIndex = spans.length - 1;
@@ -164,8 +180,9 @@ class EmojiPickerUtils {
     }
     // Add remaining text
     if (cursor != text.length) {
-      spans.add(TextSpan(
-          text: text.substring(cursor, text.length), style: parentStyle));
+      spans.add(
+        TextSpan(text: text.substring(cursor, text.length), style: parentStyle),
+      );
     }
     return spans;
   }
@@ -186,8 +203,9 @@ class EmojiPickerUtils {
   }
 
   /// Clears the list of recent emojis
-  Future<void> clearRecentEmojis(
-      {required GlobalKey<EmojiPickerState> key}) async {
+  Future<void> clearRecentEmojis({
+    required GlobalKey<EmojiPickerState> key,
+  }) async {
     return await EmojiPickerInternalUtils()
         .clearRecentEmojisInLocalStorage()
         .then((_) => key.currentState?.updateRecentEmoji([], refresh: true));
